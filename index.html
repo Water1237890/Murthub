@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#080808">
+<title>Murthub — Fictional Store</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#070707;--panel:#111;--panel2:#171717;--red:#e0182d;--red2:#ff3048;--text:#f4f4f4;--muted:#999;--line:#292929}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 85% 10%,#420713 0,#150508 22%,#070707 55%);color:var(--text);min-height:100vh;overflow-x:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+#intro{position:fixed;inset:0;background:#030303;z-index:100;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#particles{position:absolute;inset:0}
+.introContent{position:relative;text-align:center;z-index:2}
+.logo{font-size:clamp(46px,15vw,90px);font-weight:900;letter-spacing:5px;color:#fff;text-shadow:0 0 12px #fff,0 0 35px #e0182d;animation:fadeLogo 2.6s ease forwards}
+.demoTag{margin-top:12px;color:#ff586a;letter-spacing:4px;font-size:11px;text-transform:uppercase;opacity:0;animation:fadeUp 1.2s 1.4s forwards}
+@keyframes propPulse{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-5px) rotate(1deg)}}
+@keyframes fadeLogo{0%{opacity:0;transform:scale(.8);filter:blur(12px)}55%{opacity:1;transform:scale(1.04);filter:blur(0)}100%{opacity:1;transform:scale(1)}}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(15px)}}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(7,7,7,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:13px 16px}
+.nav{max-width:1100px;margin:auto;display:flex;align-items:center;gap:14px}
+.brand{font-weight:900;letter-spacing:2px;font-size:20px;white-space:nowrap}
+.brand span{color:var(--red2)}
+.search{flex:1;background:#151515;border:1px solid #292929;color:white;border-radius:13px;padding:11px 14px;outline:none}
+.search:focus{border-color:#7d1826}
+.iconBtn{border:1px solid #292929;background:#151515;color:#fff;border-radius:12px;padding:10px 12px}
+main{max-width:1100px;margin:auto;padding:18px 16px 100px}
+.banner{border:1px solid #5b1722;background:linear-gradient(120deg,#26060b,#110608);border-radius:20px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden}
+.banner:after{content:"";position:absolute;width:180px;height:180px;background:#e0182d;filter:blur(90px);opacity:.16;right:-60px;top:-80px}
+.warning{display:inline-block;background:#2a080d;border:1px solid #6d1725;color:#ff8290;padding:6px 9px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:1px}
+.banner h1{font-size:clamp(28px,7vw,48px);margin:12px 0 7px}
+.banner p{color:#bbb;max-width:650px;line-height:1.5;font-size:14px}
+.notice{margin-top:13px;color:#ff7e8a;font-size:11px;font-weight:700}
+.futureStrip{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.futureStrip span{font-size:9px;letter-spacing:1px;color:#ddd;border:1px solid #3b2026;background:rgba(255,255,255,.03);padding:7px 9px;border-radius:999px}
+.futureCard{grid-column:1/-1;border:1px solid #35252a;border-radius:18px;padding:17px;background:linear-gradient(100deg,#13070a,#101010);position:relative;overflow:hidden}
+.futureCard:after{content:"";position:absolute;width:140px;height:140px;right:-40px;top:-50px;background:#e0182d;opacity:.12;filter:blur(40px)}
+.futureCard h2{font-size:18px;margin-bottom:6px}.futureCard p{font-size:12px;color:#999;line-height:1.5}
+
+.categories{display:flex;gap:9px;overflow:auto;padding:3px 0 16px;scrollbar-width:none}
+.categories button{flex:0 0 auto;background:#111;border:1px solid #292929;color:#bbb;border-radius:999px;padding:9px 13px}
+.categories button.active,.categories button:hover{background:#3a0b12;border-color:#8e1c2c;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:13px}
+.card{background:linear-gradient(145deg,#151515,#0d0d0d);border:1px solid #292929;border-radius:17px;overflow:hidden;transition:.25s}
+.card:hover{transform:translateY(-3px);border-color:#63202b}
+.pic{height:145px;background:#0a0a0a;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.pic:before{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:#e0182d;filter:blur(55px);opacity:.2}
+.prop{font-size:57px;animation:propPulse 3s ease-in-out infinite;filter:drop-shadow(0 8px 12px #000);position:relative}
+.fakeLabel{position:absolute;left:8px;bottom:8px;background:#fff;color:#000;border-radius:5px;font-size:8px;font-weight:900;padding:3px 5px}
+.info{padding:12px}
+.info h3{font-size:14px;margin-bottom:5px}
+.info p{font-size:11px;color:#8f8f8f;min-height:31px;line-height:1.4}
+.price{margin-top:9px;font-weight:900;color:#ff5264}
+.add{width:100%;margin-top:10px;border:0;background:var(--red);color:#fff;border-radius:10px;padding:10px;font-weight:800}
+.add:active{transform:scale(.98)}
+.drawer,.modal{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:min(620px,100%);max-height:90vh;overflow:auto;background:#101010;border:1px solid #303030;border-radius:22px 22px 0 0;padding:20px;box-shadow:0 -20px 80px #000}
+.sheetHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.close{background:#1c1c1c;color:#fff;border:1px solid #333;border-radius:9px;padding:7px 10px}
+.cartRow{display:flex;gap:12px;align-items:center;border-bottom:1px solid #252525;padding:12px 0}
+.mini{width:55px;height:55px;background:#080808;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:27px}
+.cartRow .grow{flex:1}.muted{color:#8e8e8e;font-size:12px}
+.qty{display:flex;gap:6px;align-items:center}.qty button{width:28px;height:28px;border-radius:7px;border:1px solid #333;background:#181818;color:#fff}
+.total{display:flex;justify-content:space-between;font-weight:900;font-size:18px;margin:16px 0}
+.primary{width:100%;border:0;border-radius:12px;background:var(--red);color:#fff;padding:13px;font-weight:900}
+.secondary{width:100%;border:1px solid #393939;border-radius:12px;background:#171717;color:#fff;padding:12px;margin-top:8px}
+.form{display:grid;gap:10px}
+.form input{width:100%;background:#171717;border:1px solid #303030;color:#fff;padding:12px;border-radius:10px;outline:none}
+.form input:focus{border-color:#9d1e2f}
+.auth{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 20%,#360711,#050505 55%);display:flex;align-items:center;justify-content:center;padding:18px}
+.authBox{width:min(430px,100%);background:#101010;border:1px solid #343434;border-radius:22px;padding:25px;box-shadow:0 20px 80px #000}
+.authLogo{text-align:center;font-size:31px;font-weight:900;margin-bottom:5px}
+.authLogo span{color:var(--red2)}
+.authSub{text-align:center;color:#888;font-size:12px;margin-bottom:20px}
+.google{width:100%;padding:12px;border-radius:11px;border:1px solid #444;background:#fff;color:#111;font-weight:800}
+.divider{text-align:center;color:#666;font-size:11px;margin:14px 0;position:relative}
+.link{color:#ff6574;background:none;border:0;font-size:12px}
+.authFoot{text-align:center;margin-top:14px;color:#888;font-size:12px}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:15;background:rgba(8,8,8,.94);backdrop-filter:blur(15px);border-top:1px solid #252525;padding:9px}
+.bottomNav{max-width:600px;margin:auto;display:flex;justify-content:space-around}
+.bottom button{background:none;border:0;color:#aaa;font-size:11px;padding:5px 18px}.bottom button b{display:block;font-size:20px;margin-bottom:2px}.bottom button.active{color:#fff}
+.empty{text-align:center;padding:30px;color:#777}
+.orderBox{border:1px solid #43202a;background:#18090d;border-radius:14px;padding:15px;margin-top:12px}
+.status{color:#ff6474;font-weight:900;font-size:12px}
+small{color:#777}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,1fr)}.pic{height:125px}.prop{font-size:47px}.brand{font-size:17px}.search{min-width:70px}}
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <canvas id="particles"></canvas>
+  <div class="introContent">
+    <div class="logo">Murthub</div>
+    <div class="demoTag">FICTIONAL SHOPPING</div>
+  </div>
+</div>
+
+<div id="auth" class="auth hidden">
+  <div class="authBox">
+    <div class="authLogo">Mur<span>thub</span></div>
+    <div class="authSub" id="authSub">Fictional store account</div>
+
+    <div id="loginPanel">
+      <button class="google" onclick="demoLogin()">◉ Continue with Gmail</button>
+      <div class="divider">— OR —</div>
+      <div class="form">
+        <input id="email" type="email" placeholder="Email address" autocomplete="email">
+        <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+        <button class="primary" onclick="login()">Log in</button>
+      </div>
+      <div style="text-align:center;margin-top:12px">
+        <button class="link" onclick="forgot()">Forgot password?</button>
+      </div>
+      <div class="authFoot">New here? <button class="link" onclick="showSignup()">Register / Sign up</button></div>
+    </div>
+
+    <div id="signupPanel" class="hidden">
+      <div class="form">
+        <input id="signupName" type="text" placeholder="Your name" autocomplete="name">
+        <input id="signupEmail" type="email" placeholder="Email address" autocomplete="email">
+        <input id="signupPassword" type="password" placeholder="Create password" autocomplete="new-password">
+        <input id="signupConfirm" type="password" placeholder="Confirm password" autocomplete="new-password">
+        <button class="primary" onclick="registerAccount()">Create account</button>
+      </div>
+      <div class="authFoot">Already registered? <button class="link" onclick="showLogin()">Log in</button></div>
+    </div>
+  </div>
+</div>
+<header class="topbar">
+  <div class="nav">
+    <div class="brand">Mur<span>thub</span></div>
+    <input class="search" id="search" placeholder="Search fictional props..." oninput="render()">
+    <button class="iconBtn" onclick="openCart()">🛒 <span id="cartCount">0</span></button>
+    <button class="iconBtn" onclick="openAccount()">☻</button>
+  </div>
+</header>
+
+<main>
+  <section class="banner">
+    <span class="warning">⚠ ONLY FICTION</span>
+    <h1>Dark Prop Market</h1>
+    <p>A cinematic shopping interface for fictional, non-functional game props. Nothing here is a real weapon and no real order can be placed.</p>
+    <div class="notice">NO REAL PAYMENTS • NO REAL SHIPPING</div>
+    <div class="futureStrip">
+      <span>✦ NEURAL UI</span><span>◈ HOLO PRODUCTS</span><span>⌁ LIVE-STYLE STATUS</span>
+    </div>
+  </section>
+
+  <div class="categories" id="cats"></div>
+  <section class="grid" id="products"></section>
+</main>
+
+<div class="bottom">
+  <div class="bottomNav">
+    <button class="active" onclick="window.scrollTo({top:0,behavior:'smooth'})"><b>⌂</b>Home</button>
+    <button onclick="openCart()"><b>🛒</b>Cart</button>
+    <button onclick="openOrders()"><b>▣</b>Orders</button>
+    <button onclick="openAccount()"><b>●</b>Account</button>
+  </div>
+</div>
+
+<div id="cartDrawer" class="drawer hidden" onclick="if(event.target===this)closeAll()">
+  <div class="sheet">
+    <div class="sheetHead"><h2>Your Cart</h2><button class="close" onclick="closeAll()">✕</button></div>
+    <div id="cartItems"></div>
+    <div class="total"><span>Total</span><span id="total">₹0</span></div>
+    <button class="primary" onclick="checkout()">Proceed to Checkout</button>
+    <button class="secondary" onclick="closeAll()">Continue Shopping</button>
+  </div>
+</div>
+
+<div id="checkoutModal" class="modal hidden" onclick="if(event.target===this)closeAll()">
+  <div class="sheet">
+    <div class="sheetHead"><h2>Checkout</h2><button class="close" onclick="closeAll()">✕</button></div>
+    <p class="muted" style="margin-bottom:14px">This is a fictional shopping interface. Do not enter real sensitive information.</p>
+    <div class="form">
+      <input id="pin" maxlength="6" inputmode="numeric" placeholder="Enter pincode">
+      <input id="city" placeholder="Enter city">
+      <input id="address" placeholder="Enter fictional/demo address">
+      <input id="name" placeholder="Enter name">
+      <button class="primary" onclick="placeDemoOrder()">Place Order</button>
+    </div>
+  </div>
+</div>
+
+<div id="accountModal" class="modal hidden" onclick="if(event.target===this)closeAll()">
+  <div class="sheet">
+    <div class="sheetHead"><h2>Account</h2><button class="close" onclick="closeAll()">✕</button></div>
+    <div class="orderBox">
+      <div class="status">ACCOUNT</div>
+      <p id="accountText" style="margin-top:7px">Guest mode</p>
+    </div>
+    <button class="primary" style="margin-top:12px" onclick="showAuth()">Login / Register</button>
+  </div>
+</div>
+
+<div id="ordersModal" class="modal hidden" onclick="if(event.target===this)closeAll()">
+  <div class="sheet">
+    <div class="sheetHead"><h2>Orders</h2><button class="close" onclick="closeAll()">✕</button></div>
+    <div id="orders"></div>
+  </div>
+</div>
+
+<script>
+const products=[
+ {id:1,name:"Shadow Blaster X",cat:"Props",price:2499,icon:"🔫",desc:"Fictional sci-fi game prop. Non-functional."},
+ {id:2,name:"Night Sniper Mk-II",cat:"Props",price:3299,icon:"🎯",desc:"Fantasy long-range prop for games and cosplay."},
+ {id:3,name:"Crimson Sidearm",cat:"Props",price:1899,icon:"🔫",desc:"Clearly fictional cosmetic sidearm prop."},
+ {id:4,name:"Phantom Drone",cat:"Drones",price:4599,icon:"🛸",desc:"Fictional unmanned game prop; no real weapon capability."},
+ {id:5,name:"BoomCore X",cat:"Fantasy",price:2799,icon:"💣",desc:"Cartoon fantasy prop — inert and non-functional."},
+ {id:6,name:"Raven Tactical Bot",cat:"Robots",price:5199,icon:"🤖",desc:"Sci-fi robot prop concept for fictional worlds."},
+ {id:7,name:"Inferno Launcher",cat:"Fantasy",price:2199,icon:"🚀",desc:"Fantasy launcher prop with no projectile mechanism."},
+ {id:8,name:"Ghost Recon Visor",cat:"Gear",price:999,icon:"🥽",desc:"Cosplay visor accessory for fictional characters."},
+ {id:9,name:"Void Shield",cat:"Gear",price:1599,icon:"🛡️",desc:"Fantasy shield prop for cosplay and games."},
+ {id:10,name:"Redline Drone",cat:"Drones",price:3899,icon:"🚁",desc:"Fictional drone prop with simulated controls."}
+];
+let cart=JSON.parse(localStorage.getItem("murthubCart")||"[]");
+let orders=JSON.parse(localStorage.getItem("murthubOrders")||"[]");
+let category="All", user=localStorage.getItem("murthubUser")||"";
+
+function money(n){return "₹"+n.toLocaleString("en-IN")}
+function save(){localStorage.setItem("murthubCart",JSON.stringify(cart));localStorage.setItem("murthubOrders",JSON.stringify(orders));updateCount()}
+function updateCount(){document.getElementById("cartCount").textContent=cart.reduce((a,x)=>a+x.qty,0)}
+function renderCats(){
+ const cats=["All",...new Set(products.map(p=>p.cat))];
+ document.getElementById("cats").innerHTML=cats.map(c=>`<button class="${category===c?'active':''}" onclick="category='${c}';renderCats();render()">${c}</button>`).join("");
+}
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const list=products.filter(p=>(category==="All"||p.cat===category)&&(`${p.name} ${p.cat} ${p.desc}`.toLowerCase().includes(q)));
+ document.getElementById("products").innerHTML=(list.length?`<div class="futureCard">
+      <h2>⚡ Future Drop</h2>
+      <p>Explore cinematic hologram-style concepts, smart gear and fictional sci-fi collectibles. New concepts rotate automatically.</p>
+    </div>`:"")+list.map(p=>`
+ <article class="card">
+  <div class="pic"><div class="prop">${p.icon}</div><div class="fakeLabel">PROP</div></div>
+  <div class="info"><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${money(p.price)}</div>
+  <button class="add" onclick="add(${p.id})">Add to Cart</button></div>
+ </article>`).join("")||`<div class="empty" style="grid-column:1/-1">No fictional props found.</div>`;
+}
+function add(id){let x=cart.find(x=>x.id===id);x?x.qty++:cart.push({id,qty:1});save();toast("Added to demo cart")}
+function openCart(){renderCart();document.getElementById("cartDrawer").classList.remove("hidden")}
+function renderCart(){
+ const box=document.getElementById("cartItems");
+ if(!cart.length){box.innerHTML='<div class="empty">Your cart is empty.</div>';document.getElementById("total").textContent="₹0";return}
+ let total=0;
+ box.innerHTML=cart.map(x=>{let p=products.find(p=>p.id===x.id),v=p.price*x.qty;total+=v;return `<div class="cartRow"><div class="mini">${p.icon}</div><div class="grow"><b>${p.name}</b><div class="muted">${money(p.price)} × ${x.qty}</div></div><div class="qty"><button onclick="change(${p.id},-1)">−</button><span>${x.qty}</span><button onclick="change(${p.id},1)">+</button></div></div>`}).join("");
+ document.getElementById("total").textContent=money(total);
+}
+function change(id,n){let x=cart.find(x=>x.id===id);if(!x)return;x.qty+=n;if(x.qty<=0)cart=cart.filter(y=>y.id!==id);save();renderCart()}
+function checkout(){if(!cart.length)return toast("Your cart is empty");closeAll();document.getElementById("checkoutModal").classList.remove("hidden")}
+function placeDemoOrder(){
+ const pin=document.getElementById("pin").value.trim(),city=document.getElementById("city").value.trim(),address=document.getElementById("address").value.trim(),name=document.getElementById("name").value.trim();
+ if(!pin||!city||!address||!name)return toast("Please complete the demo fields");
+ if(!/^\d{6}$/.test(pin))return toast("Use a 6-digit demo pincode");
+ const id="DEMO-"+Math.random().toString(36).slice(2,8).toUpperCase();
+ orders.unshift({id,date:new Date().toLocaleString(),name,city,pin,address,items:cart.map(x=>({...x})),status:"NOT REAL"});
+ cart=[];save();closeAll();openOrders();toast("Order created");
+}
+function openOrders(){renderOrders();document.getElementById("ordersModal").classList.remove("hidden")}
+function renderOrders(){
+ const el=document.getElementById("orders");
+ if(!orders.length){el.innerHTML='<div class="empty">No orders yet.</div>';return}
+ el.innerHTML=orders.map(o=>`<div class="orderBox"><div class="status">⚠ ${o.status}</div><b>${o.id}</b><div class="muted" style="margin-top:5px">${o.date}</div><p style="margin-top:8px">Destination: ${o.city} • ${o.pin}</p><small>${o.address}</small><div style="margin-top:9px">${o.items.map(x=>{let p=products.find(p=>p.id===x.id);return `${p.name} × ${x.qty}`}).join("<br>")}</div></div>`).join("");
+}
+function openAccount(){document.getElementById("accountText").textContent=user?`Signed in as ${user}`:"Guest mode";document.getElementById("accountModal").classList.remove("hidden")}
+function showAuth(){closeAll();document.getElementById("auth").classList.remove("hidden")}
+function showAuth(){
+ closeAll();
+ document.getElementById("auth").classList.remove("hidden");
+ showLogin();
+}
+function showLogin(){
+ document.getElementById("loginPanel").classList.remove("hidden");
+ document.getElementById("signupPanel").classList.add("hidden");
+ document.getElementById("authSub").textContent="Log in to your fictional store account";
+}
+function showSignup(){
+ document.getElementById("auth").classList.remove("hidden");
+ document.getElementById("loginPanel").classList.add("hidden");
+ document.getElementById("signupPanel").classList.remove("hidden");
+ document.getElementById("authSub").textContent="Create your fictional store account";
+}
+function login(){
+ const e=document.getElementById("email").value.trim();
+ const p=document.getElementById("password").value;
+ if(!e || !p)return toast("Enter email and password");
+ if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(e))return toast("Enter a valid email");
+ user=e;
+ localStorage.setItem("murthubUser",user);
+ document.getElementById("auth").classList.add("hidden");
+ toast("Login successful");
+}
+function demoLogin(){
+ user="Gmail User";
+ localStorage.setItem("murthubUser",user);
+ document.getElementById("auth").classList.add("hidden");
+ toast("Gmail sign-in successful");
+}
+function registerAccount(){
+ const n=document.getElementById("signupName").value.trim();
+ const e=document.getElementById("signupEmail").value.trim();
+ const p=document.getElementById("signupPassword").value;
+ const c=document.getElementById("signupConfirm").value;
+ if(!n || !e || !p || !c)return toast("Complete all fields");
+ if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(e))return toast("Enter a valid email");
+ if(p.length<6)return toast("Password must be 6+ characters");
+ if(p!==c)return toast("Passwords do not match");
+ user=n;
+ localStorage.setItem("murthubUser",user);
+ document.getElementById("auth").classList.add("hidden");
+ toast("Account created");
+}
+function signup(){showSignup()}
+function forgot(){
+ const e=prompt("Enter your email for a fictional password reset:");
+ if(e && /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(e))toast("Reset link simulated");
+ else if(e)toast("Enter a valid email");
+}
+function closeAll(){document.querySelectorAll(".drawer,.modal").forEach(x=>x.classList.add("hidden"))}
+function toast(msg){const t=document.createElement("div");t.textContent=msg;t.style="position:fixed;left:50%;bottom:82px;transform:translateX(-50%);z-index:200;background:#f4f4f4;color:#090909;padding:10px 15px;border-radius:999px;font-size:12px;font-weight:800;box-shadow:0 8px 30px #000";document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+renderCats();render();updateCount();
+setTimeout(()=>document.getElementById("intro").remove(),3600);
+setTimeout(()=>{if(!user)showAuth()},3900);
+
+/* particle network */
+const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d");let pts=[];
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;pts=Array.from({length:65},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}))}
+function animate(){
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>canvas.width)p.vx*=-1;if(p.y<0||p.y>canvas.height)p.vy*=-1;
+  ctx.beginPath();ctx.arc(p.x,p.y,1.3,0,Math.PI*2);ctx.fillStyle="rgba(255,255,255,.65)";ctx.fill();
+ }
+ for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){let dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<125){ctx.strokeStyle=`rgba(255,255,255,${.13*(1-d/125)})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}
+ requestAnimationFrame(animate)
+}
+addEventListener("resize",resize);resize();animate();
+</script>
+</body>
+</html>
